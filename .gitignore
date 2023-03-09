@@ -1,0 +1,8 @@
+.vscode
+*.sh
+*.ghw
+work/*
+.pdf
+Resources/*
+save.gtkw
+RegisterView.gtkw
