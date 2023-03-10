@@ -1,0 +1,47 @@
+TODO:
+** nettoyer le todo
+** shadow Register
+** flush pipe but only what needed
+*x Register manager:
+    xx rs0 to rs31
+    ** sh0 and sh1 (COND and ACR)
+    ** remove front end conn
+xx JM flag set by front end acess ? -> only JALR needs decode to acess Reg value
+** limitation wth current impl of JM flag on Register, trigger flush if decode get a register that is being WB,
+    curently need to wait that WB is not using the same reg -> delay flag set to next instruction?
+*x WB
+    xx 1st version
+    ** verifier que rd = r0 => Wb do MemResp
+    xx liste Operation Ex → Wb :
+        - Nop
+        - wb
+        - LD
+        - ST
+        - JUMP
+        - Br(fn3) (=8 op)
+            -> 13op = 4bits (= 16 possible)
+            -> 6op = 3bits + funct3 (total of 6bits but less logic)
+    ** Branch and jmp return Adress to br and jmp 
+*x THE ENTIRE FRONT END
+    xx PC
+    ** Fetch = Ram acess
+        *x /!\ do work at falling edge -> one IR for all front end so br&jmp can have PC and not pc+4
+            xx PC inc at rising -> cool bcs br&jmp work at rising
+            ** fetch work at falling
+        ** get next instruction
+        ** LDST acess
+            **LDST load
+            **LDST store
+            **arbitrage
+    xx decode
+    ** Jump and branch
+        xx detect instruction that involve PC
+        xx set delay
+        xx pass next uOp based on Op and delay state
+        ** set pc jmp_addr 32b bus
+        ** detect rd = 0 and save a clk ?
+        ** detect AUIPC Imm = 0 and save a clk ?
+        ** Return Adress Stack (jal push if rs1/5, jalr push/pull see doc)
+    ** ACR = adress compute return WB => jump and branch
+** Ex:
+    ** unsigned comparison for branching

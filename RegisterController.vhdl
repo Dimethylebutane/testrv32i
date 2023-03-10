@@ -23,14 +23,15 @@ entity RegCntrll is
         --WB conn
         addr_i : in RegisterAddr;
         dbus_i : in BUS_type := (others => 'Z');
-        fwb_op : in std_logic_vector(2 downto 0) --see Register OP
+        fwb_op : in std_logic_vector(2 downto 0); --see Register OP
+        cond_o : out std_logic_vector(1 downto 0)
     );
 end RegCntrll;
 
 architecture behaviour of RegCntrll is
     signal registersMat : RegisterMatrix;
-
-    signal selct : std_logic_vector(31+2 downto 1) := (others => 'L');
+                            --Register, sh1, ACR, Condition
+    signal selct : std_logic_vector(31+3 downto 1) := (others => 'L');
 
     signal setJM : std_logic;
     signal internal_busy : std_logic;
@@ -48,6 +49,12 @@ begin
             );
         selct(i) <= '1' when unsigned(addr_i) = to_unsigned(i, 5) else '0';
     end generate GEN_REG;
+
+    COND : entity work.Condition(behaviour) port map(
+        clk  => clk,
+        val  => registersMat(33).val,
+        cond => cond_o
+    );
 
     --pull down for R0:
     registersMat(0).val <= (others => '0');

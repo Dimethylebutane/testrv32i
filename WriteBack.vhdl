@@ -48,7 +48,8 @@ begin
              "100" when Op_i = "10" else       -- Load (set ld)
              "000";                            -- NOP
 
-    rd_addr <= i_Reg_addr(4 downto 0);
+    rd_addr(4 downto 0) <= i_Reg_addr(4 downto 0);
+    rd_addr(5) <= '0';
     rd_val  <= i_Reg_value;
 
 

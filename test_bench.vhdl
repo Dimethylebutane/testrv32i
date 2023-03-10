@@ -33,7 +33,7 @@ end test_bench;
 
     --LdSt
     signal MemReq  : MEMORY_REQUEST  := ( addr => (others => 'L'), op => 'L', val => (others => 'L'));
-    signal MemResp : MEMORY_RESPONSE := ( val => ('1', others => '0'), Reg => "00010");
+    signal MemResp : MEMORY_RESPONSE := ( val => (others => '0'), Reg => (others => '0'));
     signal MemAckresp : std_logic := 'L';
     signal MemSendReq : std_logic := 'L';
 
@@ -68,9 +68,9 @@ end test_bench;
       --WB wb
       WB_Op_i <= "01";
 
-      RegAddr_o0 <= "00001";
-      RegAddr_o1 <= "00000";
-      WB_Imm_i <= (others => '1');
+      RegAddr_o0 <= "000010";
+      RegAddr_o1 <= "000000";
+      WB_Imm_i <= ('0', others => '1');
 
       --set registers (1 to 4) to -1
       for i in 0 to 4 loop

@@ -1,4 +1,5 @@
-ls
+#!/bin/sh
+
 #import all sources
 ghdl -i --workdir=work *.vhdl
 #make project
