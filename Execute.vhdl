@@ -10,6 +10,7 @@ entity Ex is
         clk : in std_logic;
         w_i : in std_logic;
         w_o : out std_logic;
+        flush : in std_logic;
 
         --Bus
         Imm_i   : in ImmPipe;
@@ -34,9 +35,14 @@ end Ex;
 
 architecture behaviour of Ex is
     signal w_internal : std_logic := "0";
+
+    signal internal_Op  : OpPipe;
 begin
     --if stage is waiting then make upper stage to wait
-    w_o <= "1" when w_internal = "1" else w_i;
+    w_o <= w_internal or w_i;
+
+    -- flush is transform Op to nop, dont care about reg or imm
+    internal_Op <= Op_i when flush /= '0' else (others => '0');
 
     --route register addr
     rs1_addr <= Reg_i(1);
@@ -49,16 +55,24 @@ begin
             --TODO: execute
         end if;
         if falling_edge(clk) then
-            if w_o = "1" then --if wait send nop
-                Imm_o <= Imm_i;
-                Rd_o <= (others => '0'); --last stage before RegStore    
+            if w_internal = '1' and  then --if wait but not bcs bellow stage, send nop
                 Op_o <= "00";
-            else
-                Imm_o             <= Imm_i;
-                Rd_o(4 downto 0)  <= Reg_i(0); --last stage before RegStore
-                Rd_o(31 downto 5) <= (others => '0');
-                Op_o <= "00"; --TODO
+            else --TODO
+                Op_o <= "00";
             end if;
+            
+            Imm_o <= Imm_i;
+            Rd_o(4 downto 0)  <= Reg_i(0); --last stage before RegStore
+            Rd_o(31 downto 5) <= (others => '0');
+
         end if;
       end process;
+
+    process(flush)
+    begin
+        if flush = '1' then
+            
+            end if;
+    end process;
+
 end behaviour;

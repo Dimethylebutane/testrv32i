@@ -2,16 +2,16 @@ TODO:
 ** nettoyer le todo
 ** shadow Register
 ** flush pipe but only what needed
-*x Register manager:
+xx Register manager:
     xx rs0 to rs31
-    ** sh0 and sh1 (COND and ACR)
-    ** remove front end conn
+    xx sh0 and sh1 (COND and ACR)
+    xx remove front end conn
 xx JM flag set by front end acess ? -> only JALR needs decode to acess Reg value
 ** limitation wth current impl of JM flag on Register, trigger flush if decode get a register that is being WB,
     curently need to wait that WB is not using the same reg -> delay flag set to next instruction?
 *x WB
     xx 1st version
-    ** verifier que rd = r0 => Wb do MemResp
+    ** si rd = r0 alors Wb do MemResp
     xx liste Operation Ex → Wb :
         - Nop
         - wb

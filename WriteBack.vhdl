@@ -7,16 +7,16 @@ use work.types.all;
 -- => WB never sleep
 entity WriteBack is
     port (
-        --ctrl
+        -- ctrl
         clk : in std_logic;
 
-        --Bus
+        -- Bus-Ex
         Imm_i   : in ImmPipe;   --result of Execute
         Op_i    : in std_logic_vector(1 downto 0);--Store Operation (nop, WB, load, store), load and store are async ram operation
         Reg_i   : in BUS_Type;  --Register part (32 bit bcs may hold an adress (ram operation))
         Jalr_i  : in std_logic; --Jalr instruction, reset jm flag of register Reg_i[4:0]
 
-        --LDST
+        -- LDST
         MemReq  : out MEMORY_REQUEST;
         MemResp : in MEMORY_RESPONSE;
         MemAckresp : out std_logic;
@@ -27,6 +27,9 @@ entity WriteBack is
         rd_val     : out BUS_Type;
         rd_Op      : out std_logic_vector(2 downto 0); --shall Register consider LD flag before updating value?
         rd_resetJM : out std_logic
+
+        -- Front-end
+        jmp_sig : out std_logic;
     );
 end WriteBack;
 

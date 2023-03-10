@@ -25,13 +25,16 @@ entity RegCntrll is
         dbus_i : in BUS_type := (others => 'Z');
         fwb_op : in std_logic_vector(2 downto 0); --see Register OP
         cond_o : out std_logic_vector(1 downto 0)
+
+        ---ACR
+        ACR : out BUS_type;
     );
 end RegCntrll;
 
 architecture behaviour of RegCntrll is
     signal registersMat : RegisterMatrix;
-                            --Register, sh1, ACR, Condition
-    signal selct : std_logic_vector(31+3 downto 1) := (others => 'L');
+                            --Register, sh0/ACR, Condition
+    signal selct : std_logic_vector(31+2 downto 1) := (others => 'L');
 
     signal setJM : std_logic;
     signal internal_busy : std_logic;
@@ -41,7 +44,7 @@ begin
 
     addr_1_internal <= addr_o1;
 
-    GEN_REG: for i in 1 to 31+2 generate
+    GEN_REG: for i in 1 to 31+1 generate
         REGX : entity work.Reg(behaviour) port map
             (clk => clk,
             outp_val => registersMat(i).val, ld_flag => registersMat(i).ld, jm_flag => registersMat(i).jm,
@@ -49,7 +52,8 @@ begin
             );
         selct(i) <= '1' when unsigned(addr_i) = to_unsigned(i, 5) else '0';
     end generate GEN_REG;
-
+    
+    ACR <= registersMat(32).val;
     COND : entity work.Condition(behaviour) port map(
         clk  => clk,
         val  => registersMat(33).val,
