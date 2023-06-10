@@ -14,7 +14,7 @@ entity WriteBack is
         Imm_i   : in ImmPipe;   --result of Execute
         Op_i    : in std_logic_vector(1 downto 0);--Store Operation (nop, WB, load, store), load and store are async ram operation
         Reg_i   : in BUS_Type;  --Register part (32 bit bcs may hold an adress (ram operation))
-        Jalr_i  : in std_logic; --Jalr instruction, reset jm flag of register Reg_i[4:0]
+        Jalr_i  : in std_logic; --Jalr instruction, reset jm flag of register Reg_i[5:0]
 
         -- LDST
         MemReq  : out MEMORY_REQUEST;
@@ -26,7 +26,7 @@ entity WriteBack is
         rd_addr    : out RegisterAddr;
         rd_val     : out BUS_Type;
         rd_Op      : out std_logic_vector(2 downto 0); --shall Register consider LD flag before updating value?
-        rd_resetJM : out std_logic
+        --rd_resetJM : out std_logic
 
         -- Front-end
         jmp_sig : out std_logic;
